@@ -3,22 +3,19 @@ using System.Collections.Generic;
 
 class HigherLower
 {
-  private int guessNumber;
-  private int maxNumber;
-  private int minNumber;
+  private int guessNumber = 50;
+  private int maxNumber = 100;
+  private int minNumber = 0;
+  private string _userInput;
 
-  public void InitializeGame()
+  public void SetInput(string input)
   {
-    guessNumber = 50;
-    maxNumber = 100;
-    minNumber = 0;
+    _userInput = input;
   }
 
-  public void GameFlow()
+  public string GetInput()
   {
-    Console.WriteLine("Is your number higher or lower than " + guessNumber + "? (Higher/Lower/Correct)");
-    string input = Console.ReadLine().ToLower();
-    Guess(input);
+    return _userInput;
   }
 
   private int ceilingAverage(int max, int min)
@@ -33,45 +30,60 @@ class HigherLower
     }
   }
 
-  private void Guess(string userInput)
+  public void Guess()
   {
-    if (userInput == "higher")
+    if (_userInput == "higher")
     {
       minNumber = guessNumber;
       guessNumber = ceilingAverage(maxNumber, minNumber);
-      GameFlow();
+      Console.WriteLine("Is your number higher or lower than " + guessNumber + "? (Higher/Lower/Correct)");
+
+      string input = Console.ReadLine().ToLower();
+      SetInput(input);
+
+      Guess();
     }
-    else if (userInput == "lower")
+    else if (_userInput == "lower")
     {
       maxNumber = guessNumber;
       guessNumber = ceilingAverage(maxNumber, minNumber);
-      GameFlow();
+      Console.WriteLine("Is your number higher or lower than " + guessNumber + "? (Higher/Lower/Correct)");
+
+      string input = Console.ReadLine().ToLower();
+      SetInput(input);
+
+      Guess();
     }
-    else if (userInput == "correct")
+    else if (_userInput == "correct")
     {
       Console.WriteLine("Great! I guessed your number. Would you like to play again? (Yes/No)");
-      string playAgain = Console.ReadLine();
-      playAgain = playAgain.ToLower();
+      string playAgain = Console.ReadLine().ToLower();
       if (playAgain == "yes")
       {
-        InitializeGame();
-        GameFlow();
+        Program.Main();
       }
     }
     else
     {
       Console.WriteLine("Please enter a valid option.");
-      GameFlow();
+      string input = Console.ReadLine().ToLower();
+      SetInput(input);
+
+      Guess();
     }
   }
 }
 
 class Program
 {
-  static void Main()
+  public static void Main()
   {
     HigherLower newGame = new HigherLower();
-    newGame.InitializeGame();
-    newGame.GameFlow();
+
+    Console.WriteLine("Is your number higher or lower than 50?  (Higher/Lower/Correct)");
+    string input = Console.ReadLine().ToLower();
+
+    newGame.SetInput(input);
+    newGame.Guess();
   }
 }
